@@ -12,6 +12,7 @@ public class TurnControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		TurnText = this.gameObject.GetComponent<Text> ();
 	}
 	
 	// Update is called once per frame
@@ -22,14 +23,26 @@ public class TurnControl : MonoBehaviour {
 	static int WatcherCount;
 	static int TurnPlayer;
 	static string State;
+	Text TurnText;
 
-	public void TurnInfomation(Dictionary<string, object> ReceivedTurn){
-		//Post.GET (Post.ipaddr + Post.Port + "/plays/" + Login.GetSavedPlay ().ToString ());
-		TurnCount= Convert.ToInt32(ReceivedTurn["turn_count"].ToString());
-		WatcherCount = Convert.ToInt32(ReceivedTurn["watcher_count"].ToString());
-		TurnPlayer = Convert.ToInt32(ReceivedTurn ["turn_player"].ToString());
-		State = ReceivedTurn ["state"].ToString ();
+	public static void TurnInfomation(){
+		string url = Post.ipaddr + Post.Port + "/plays/" + Login.GetSavedPlay ().ToString ();
+		UnityEngine.Events.UnityAction<string> Request = SaveTurn;
+		Post.GetPost().GET(url,Request);
 	}
+
+	public static void SaveTurn(string ReceivedTurn){
+		var json = MiniJSON.Json.Deserialize (ReceivedTurn) as Dictionary<string, object>;
+		TurnCount = Convert.ToInt32 (json ["turn_count"].ToString ());
+		WatcherCount = Convert.ToInt32 (json ["watcher_count"].ToString ());
+		TurnPlayer = Convert.ToInt32 (json ["turn_player"].ToString ());
+		State = json ["state"].ToString ();
+	}
+
+	//public void ChangeTurnText(){
+	//	TurnText = 
+
+
 
 
 

@@ -37,6 +37,7 @@ public class StateSetting : MonoBehaviour {
 		state ();
 		StateInformation ();
 		time -= 1f;
+
 		if (StateText.text == "GAME START"){
 			if( CreatedPiece == 0){
 				PlayerInformation ();
@@ -149,7 +150,8 @@ public class StateSetting : MonoBehaviour {
 						GameObject Clone = (GameObject)Instantiate (KomaCheck,transform.position,transform.rotation);
 						Clone.transform.SetParent (UnityEngine.Object.FindObjectOfType<Canvas> ().transform);
 						Clone.transform.localPosition = new Vector3(posx,posy,0);
-						KomaInfo KomaInfoComponent = gameObject.transform.GetComponent<KomaInfo>();
+						TurnControl.TurnInfomation();
+						KomaInfo KomaInfoComponent = Clone.GetComponent<KomaInfo>();
 						KomaInfoComponent.ReceivedUpdatePiece(piece,i);
 					}
 				}
@@ -181,6 +183,7 @@ public class StateSetting : MonoBehaviour {
 			GET (Post.ipaddr + Post.Port +"/plays/" + Login.GetSavedPlay ().ToString () + "/state", "state");
 			WinnerInformation();
 			time = 60.0f;
+			TurnControl.TurnInfomation();
 		}
 	}
 	public void WinnerInformation(){
