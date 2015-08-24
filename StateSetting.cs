@@ -149,6 +149,8 @@ public class StateSetting : MonoBehaviour {
 						GameObject Clone = (GameObject)Instantiate (KomaCheck,transform.position,transform.rotation);
 						Clone.transform.SetParent (UnityEngine.Object.FindObjectOfType<Canvas> ().transform);
 						Clone.transform.localPosition = new Vector3(posx,posy,0);
+						KomaInfo KomaInfoComponent = gameObject.transform.GetComponent<KomaInfo>();
+						KomaInfoComponent.ReceivedUpdatePiece(piece,i);
 					}
 				}
 				CreatedPiece = 1;

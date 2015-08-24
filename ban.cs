@@ -38,7 +38,18 @@ public class ban : MonoBehaviour {
 	public static int[,] KomaIdArray = new int [9,9];
 
 	public static void SetKomaIdArray (int posx, int posy, int Id){
-		KomaIdArray [posx - 1] [posy - 1] = Id;
+		KomaIdArray [posx - 1,posy - 1] = Id;
+	}
+	public static int GetKomaIdArray (int posx, int posy){
+		int Id = KomaIdArray [posx - 1,posy - 1];
+		return Id;
+	}
+	public static void InitKomaIdArray(){
+		for (var x = 1; x <=9; x ++) {
+			for (var y = 1; y <=9; y++) {
+				SetKomaIdArray (x, y, -1);//-1 = 駒が存在しない
+			}
+		}
 	}
 }
 

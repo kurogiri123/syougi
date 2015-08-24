@@ -29,7 +29,7 @@ public class Post : MonoBehaviour {
 	}
 	public WWW GET(string url, UnityEngine.Events.UnityAction<string> Request)
 	{
-		WWW www = new WWW ();
+		WWW www = new WWW (url);
 		StartCoroutine (WaitForRequest (Request,www));
 		return www;
 	}
