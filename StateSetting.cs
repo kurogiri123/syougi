@@ -83,7 +83,7 @@ public class StateSetting : MonoBehaviour {
 			if(StateType == "users"){
 				var last_player = (Dictionary<string,object>) json["last_player"];
 				SavedPlayer = last_player["user_id"].ToString();
-				PiecesInformation ();
+				PiecesInformation();
 			}
 			//----------------------------------------------------------駒配置-------------------------------------------------
 
@@ -153,6 +153,7 @@ public class StateSetting : MonoBehaviour {
 						//TurnControl.TurnInfomation();
 						KomaInfo KomaInfoComponent = Clone.GetComponent<KomaInfo>();
 						KomaInfoComponent.ReceivedUpdatePiece(piece,i);
+						KomaInfo.KomaArray[i-1] = Clone;
 					}
 				}
 				CreatedPiece = 1;

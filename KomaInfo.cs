@@ -17,14 +17,14 @@ public class KomaInfo : MonoBehaviour {
 	void Update () {
 	}
 
-	public static int MoveId;
-	public static int Posx;
-	public static int Posy;
-	public static string Promote;
+	public int MoveId;
+	public int Posx;
+	public int Posy;
+	public string Promote;
 	//static int GetId;
 	static string StateUpdate;
 
-	public static void UpdatePiece(){
+	public void UpdatePiece(){
 		string url = Post.ipaddr + Post.Port + "/plays/update";
 		Dictionary<string,string> dic = new Dictionary<string, string> ();
 		dic ["play_id"] = Login.GetSavedPlay().ToString();
@@ -36,6 +36,7 @@ public class KomaInfo : MonoBehaviour {
 		//dic ["get_id"] = GetId.ToString();
 		UnityEngine.Events.UnityAction<string> Request = SaveUpdatePiece;
 		Post.GetPost().POST (url, dic, Request);
+		MoveKoma.PiecesInformation ();
 	}
 
 	public void ReceivedUpdatePiece(Dictionary<string, object> ReceivedUpdate, int Id){
@@ -46,8 +47,10 @@ public class KomaInfo : MonoBehaviour {
 		//GetId = Convert.ToInt32(ReceivedUpdate["get_id"].ToString());
 	}
 
-	public static void SaveUpdatePiece(string ReceivedTurn){
+	public  void SaveUpdatePiece(string ReceivedTurn){
 		var json = MiniJSON.Json.Deserialize (ReceivedTurn) as Dictionary<string, object>;
 		StateUpdate = json ["update"].ToString ();
 	}
+
+	public static GameObject[] KomaArray = new GameObject[40];
 }

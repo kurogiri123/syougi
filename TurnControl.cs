@@ -33,6 +33,7 @@ public class TurnControl : MonoBehaviour {
 		string url = Post.ipaddr + Post.Port + "/plays/" + Login.GetSavedPlay ().ToString ();
 		UnityEngine.Events.UnityAction<string> Request = SaveTurn;
 		Post.GetPost().GET(url,Request);
+		MoveKoma.PiecesInformation ();
 	}
 
 	public static void SaveTurn(string ReceivedTurn){
@@ -51,13 +52,6 @@ public class TurnControl : MonoBehaviour {
 	}
 
 
-	public static void WaitForYourTurn(GameObject Masu){
-		if (TurnPlayer != Login.GetSavedUser ()) {
-			Masu.SetActive(false);
-		}else {
-			Masu.SetActive(true);
-		}
-	}
 
 
 

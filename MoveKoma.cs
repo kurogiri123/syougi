@@ -129,11 +129,14 @@ public class MoveKoma : MonoBehaviour {
 
 	public void moveClicked(){
 		if (TurnControl.TurnPlayer == Login.GetSavedUser ()) {
-			Move = transform.position;
-			target.transform.position = Move;
+			Move = transform.localPosition;
+			target.transform.localPosition = Move;
 			DestroyMasu ();
-			PiecesInformation ();
-			KomaInfo.UpdatePiece ();
+			KomaInfo KomaInfoComponent = target.GetComponent<KomaInfo>();
+			KomaInfoComponent.Posx = ban.LocalX((int)Move.x);
+			KomaInfoComponent.Posy = ban.LocalY((int)Move.y);
+			KomaInfoComponent.UpdatePiece();
+			//KomaInfoComponent.ReceivedUpdatePiece(piece,(int)target.MoveId);
 		}
 	}
 	//----------------------------------------------------------味方-----------------------------------------------
@@ -197,7 +200,7 @@ public class MoveKoma : MonoBehaviour {
 	}
 
 	//-----------------------------------------------------駒の移動制限------------------------------------------------
-	public void PiecesInformation()
+	public static void PiecesInformation()
 	{
 		string url = Post.ipaddr + Post.Port + "/plays/" + Login.GetSavedPlay ().ToString () +"/pieces";
 		UnityEngine.Events.UnityAction<string> Request = CheckIdInfo;
@@ -214,6 +217,9 @@ public class MoveKoma : MonoBehaviour {
 			int posx = Convert.ToInt32(piece["posx"]);
 			int posy = Convert.ToInt32(piece["posy"]);
 			ban.SetKomaIdArray(posx,posy,i);
+			posx = ban.ServerX(posx);
+			posy = ban.ServerY(posy);
+			KomaInfo.KomaArray[i-1].transform.localPosition = new Vector3(posx,posy,0);
 		}
 	}
 	

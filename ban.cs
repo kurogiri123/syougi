@@ -39,6 +39,7 @@ public class ban : MonoBehaviour {
 
 	public static void SetKomaIdArray (int posx, int posy, int Id){
 		KomaIdArray [posx - 1,posy - 1] = Id;
+		Debug.Log (posx+","+posy+","+ Id);
 	}
 	public static int GetKomaIdArray (int posx, int posy){
 		int Id = KomaIdArray [posx - 1,posy - 1];
