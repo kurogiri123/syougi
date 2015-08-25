@@ -150,7 +150,7 @@ public class StateSetting : MonoBehaviour {
 						GameObject Clone = (GameObject)Instantiate (KomaCheck,transform.position,transform.rotation);
 						Clone.transform.SetParent (UnityEngine.Object.FindObjectOfType<Canvas> ().transform);
 						Clone.transform.localPosition = new Vector3(posx,posy,0);
-						TurnControl.TurnInfomation();
+						//TurnControl.TurnInfomation();
 						KomaInfo KomaInfoComponent = Clone.GetComponent<KomaInfo>();
 						KomaInfoComponent.ReceivedUpdatePiece(piece,i);
 					}
@@ -203,6 +203,7 @@ public class StateSetting : MonoBehaviour {
 		if (GetSavedState () != "waiting") {
 			if(StateText.text != "GAME START"){
 				StateText.text = "GAME START";
+				TurnControl.TurnInfomation();
 			}
 		}
 	}

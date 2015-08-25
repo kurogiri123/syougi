@@ -12,23 +12,26 @@ public class TurnControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		TurnText = this.gameObject.GetComponent<Text> ();
+		//TurnText = this.gameObject.GetComponent<Text> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		TurnText.text = "ターン：" + TurnCountText();
 	}
 
 	static int TurnCount;
 	static int WatcherCount;
 	static int TurnPlayer;
-	static string State;
-	Text TurnText;
+	//static string State;
+	public Text TurnText;
+
 
 	public static void TurnInfomation(){
 		string url = Post.ipaddr + Post.Port + "/plays/" + Login.GetSavedPlay ().ToString ();
 		UnityEngine.Events.UnityAction<string> Request = SaveTurn;
 		Post.GetPost().GET(url,Request);
+
 	}
 
 	public static void SaveTurn(string ReceivedTurn){
@@ -36,11 +39,14 @@ public class TurnControl : MonoBehaviour {
 		TurnCount = Convert.ToInt32 (json ["turn_count"].ToString ());
 		WatcherCount = Convert.ToInt32 (json ["watcher_count"].ToString ());
 		TurnPlayer = Convert.ToInt32 (json ["turn_player"].ToString ());
-		State = json ["state"].ToString ();
+		//State = json ["state"].ToString ();
+		Debug.Log (TurnCount);
+		Debug.Log (TurnPlayer);
 	}
 
-	//public void ChangeTurnText(){
-	//	TurnText = 
+	public static int TurnCountText(){
+		return TurnCount;
+	}
 
 
 
