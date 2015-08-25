@@ -20,18 +20,19 @@ public class TurnControl : MonoBehaviour {
 		TurnText.text = "ターン：" + TurnCountText();
 	}
 
-	static int TurnCount;
+	static int TurnCount=0;
 	static int WatcherCount;
-	static int TurnPlayer;
+	public static int TurnPlayer;
 	//static string State;
 	public Text TurnText;
+
+	
 
 
 	public static void TurnInfomation(){
 		string url = Post.ipaddr + Post.Port + "/plays/" + Login.GetSavedPlay ().ToString ();
 		UnityEngine.Events.UnityAction<string> Request = SaveTurn;
 		Post.GetPost().GET(url,Request);
-
 	}
 
 	public static void SaveTurn(string ReceivedTurn){
@@ -40,6 +41,7 @@ public class TurnControl : MonoBehaviour {
 		WatcherCount = Convert.ToInt32 (json ["watcher_count"].ToString ());
 		TurnPlayer = Convert.ToInt32 (json ["turn_player"].ToString ());
 		//State = json ["state"].ToString ();
+		//WaitForYourTurn ();
 		Debug.Log (TurnCount);
 		Debug.Log (TurnPlayer);
 	}
@@ -47,6 +49,17 @@ public class TurnControl : MonoBehaviour {
 	public static int TurnCountText(){
 		return TurnCount;
 	}
+
+
+	public static void WaitForYourTurn(GameObject Masu){
+		if (TurnPlayer != Login.GetSavedUser ()) {
+			Masu.SetActive(false);
+		}else {
+			Masu.SetActive(true);
+		}
+	}
+
+
 
 
 

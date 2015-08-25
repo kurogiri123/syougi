@@ -16,6 +16,7 @@ public class MoveKoma : MonoBehaviour {
 	private MoveKoma Control;
 	private Vector3 MasuPosition;
 	private Vector3 Move;
+	public static bool CheckMove;
 
 
 	static string PieceName;
@@ -127,11 +128,13 @@ public class MoveKoma : MonoBehaviour {
 	}
 
 	public void moveClicked(){
-		Move = transform.position;
-		target.transform.position = Move;
-		DestroyMasu ();
-		PiecesInformation ();
-		KomaInfo.UpdatePiece ();
+		if (TurnControl.TurnPlayer == Login.GetSavedUser ()) {
+			Move = transform.position;
+			target.transform.position = Move;
+			DestroyMasu ();
+			PiecesInformation ();
+			KomaInfo.UpdatePiece ();
+		}
 	}
 	//----------------------------------------------------------味方-----------------------------------------------
 	//----------------------------------------------------------敵---------------------------------------------
@@ -213,6 +216,7 @@ public class MoveKoma : MonoBehaviour {
 			ban.SetKomaIdArray(posx,posy,i);
 		}
 	}
+	
 	//---------------------------------------------------駒の動いた情報を送る----------------------------------------------
 	/*public void UpdatePiece(){
 		string url = Post.ipaddr + Post.Port + "/plays/update";
