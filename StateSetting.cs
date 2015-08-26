@@ -25,6 +25,7 @@ public class StateSetting : MonoBehaviour {
 	public GameObject Enemykin;
 	public GameObject kyoku;
 	public GameObject ou;
+    public GameObject ban;
 
 	int CreatedPiece = 0;
 
@@ -95,7 +96,8 @@ public class StateSetting : MonoBehaviour {
 					bool CheckOwner = Convert.ToInt32 (piece["owner"]) == Login.GetSavedUser();
 					if((int)Login.GetSavedUser() == Convert.ToInt32(SavedPlayer)){
 						CheckOwner = Convert.ToInt32 (piece["owner"]) != Login.GetSavedUser();
-					}
+                        ban.transform.Rotate(new Vector3(0, 0, 180), Space.Self);
+                    }
 					if(piece["name"].ToString() == "fu"){
 						KomaCheck = hu;
 						if(CheckOwner == false){
