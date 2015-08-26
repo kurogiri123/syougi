@@ -25,19 +25,25 @@ public class StateSetting : MonoBehaviour {
 	public GameObject Enemykin;
 	public GameObject kyoku;
 	public GameObject ou;
-    public GameObject ban;
+
+
+
 
 	int CreatedPiece = 0;
 
 	void Start(){
 		StateInformation ();
 	}
-	float time = 60.0f;
+	float time = 1.0f;
 	float StartTextTimer = 120f;
 	void Update(){
-		state ();
-		StateInformation ();
-		time -= 1f;
+		time = time - Time.deltaTime;
+		if (time <= 0f) {
+			state ();
+			StateInformation ();
+			time = 1.0f;
+
+		}
 
 		if (StateText.text == "GAME START"){
 			if( CreatedPiece == 0){
@@ -58,7 +64,7 @@ public class StateSetting : MonoBehaviour {
 	static string SavedWinner = null;
 	static string SavedPieces=null;
 	static string PieceId;
-	static string SavedPlayer;
+	public static string SavedPlayer;
 
 
 	public WWW GET(string url, string StateType)
@@ -85,6 +91,8 @@ public class StateSetting : MonoBehaviour {
 				var last_player = (Dictionary<string,object>) json["last_player"];
 				SavedPlayer = last_player["user_id"].ToString();
 				PiecesInformation();
+				TurnControl.RotateBan();
+				UnityEngine.Events.UnityAction Request = TurnControl.RotateBan;
 			}
 			//----------------------------------------------------------駒配置-------------------------------------------------
 
@@ -94,10 +102,9 @@ public class StateSetting : MonoBehaviour {
 					var piece = (Dictionary<string,object>) json[i.ToString()];
 					GameObject KomaCheck = null;
 					bool CheckOwner = Convert.ToInt32 (piece["owner"]) == Login.GetSavedUser();
-					if((int)Login.GetSavedUser() == Convert.ToInt32(SavedPlayer)){
+					/*if((int)Login.GetSavedUser() == Convert.ToInt32(SavedPlayer)){
 						CheckOwner = Convert.ToInt32 (piece["owner"]) != Login.GetSavedUser();
-                        ban.transform.Rotate(new Vector3(0, 0, 180), Space.Self);
-                    }
+                    }*/
 					if(piece["name"].ToString() == "fu"){
 						KomaCheck = hu;
 						if(CheckOwner == false){
@@ -150,12 +157,15 @@ public class StateSetting : MonoBehaviour {
 						int posx = ban.ServerX(Convert.ToInt32(piece["posx"]));
 						int posy = ban.ServerY(Convert.ToInt32(piece["posy"]));
 						GameObject Clone = (GameObject)Instantiate (KomaCheck,transform.position,transform.rotation);
-						Clone.transform.SetParent (UnityEngine.Object.FindObjectOfType<Canvas> ().transform);
-						Clone.transform.localPosition = new Vector3(posx,posy,0);
+						Clone.transform.SetParent (UnityEngine.GameObject.Find("ban_main").transform);
+						Clone.transform.localPosition = new Vector3(posx,posy,1);
 						//TurnControl.TurnInfomation();
 						KomaInfo KomaInfoComponent = Clone.GetComponent<KomaInfo>();
 						KomaInfoComponent.ReceivedUpdatePiece(piece,i);
 						KomaInfo.KomaArray[i-1] = Clone;
+						if((int)Login.GetSavedUser() == Convert.ToInt32(SavedPlayer)){
+							Clone.transform.Rotate (new Vector3 (0, 0, 180), Space.Self);
+						}
 					}
 				}
 				CreatedPiece = 1;
@@ -182,12 +192,9 @@ public class StateSetting : MonoBehaviour {
 
 	//----------------------------------------------------------状態, 勝負, 駒, プレイヤー 拾得-----------------------------------------
 	public void StateInformation(){
-		if (time < 0) {
-			GET (Post.ipaddr + Post.Port +"/plays/" + Login.GetSavedPlay ().ToString () + "/state", "state");
-			WinnerInformation();
-			time = 60.0f;
-			TurnControl.TurnInfomation();
-		}
+		GET (Post.ipaddr + Post.Port +"/plays/" + Login.GetSavedPlay ().ToString () + "/state", "state");
+		WinnerInformation();
+		TurnControl.TurnInfomation();
 	}
 	public void WinnerInformation(){
 			GET (Post.ipaddr + Post.Port + "/plays/" + Login.GetSavedPlay ().ToString () + "/winner", "winner");
@@ -207,6 +214,7 @@ public class StateSetting : MonoBehaviour {
 			if(StateText.text != "GAME START"){
 				StateText.text = "GAME START";
 				TurnControl.TurnInfomation();
+			
 			}
 		}
 	}
@@ -224,4 +232,6 @@ public class StateSetting : MonoBehaviour {
 			Debug.Log ("win");
 		}
 	}
+	
+
 }

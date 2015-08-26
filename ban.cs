@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ban : MonoBehaviour {
 
-	private static Vector3 LocalStandardPosition = new Vector3(49,183,0);//盤の1*1のglobal position
+	private static Vector3 LocalStandardPosition = new Vector3((float)171,(float)171,0);//盤の1*1のglobal position
 	private static Vector3 ServerStandardPosition = new Vector3 (1, 1, 0);//serverのglobal position
 //--------------------------------------------serverとglobal positionの座標変換-------------------------------
 	public static int LocalX(int PLX){//PLX = Pieces Local X
@@ -39,7 +39,6 @@ public class ban : MonoBehaviour {
 
 	public static void SetKomaIdArray (int posx, int posy, int Id){
 		KomaIdArray [posx - 1,posy - 1] = Id;
-		Debug.Log (posx+","+posy+","+ Id);
 	}
 	public static int GetKomaIdArray (int posx, int posy){
 		int Id = KomaIdArray [posx - 1,posy - 1];

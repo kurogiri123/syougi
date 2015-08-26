@@ -17,6 +17,7 @@ public class MoveKoma : MonoBehaviour {
 	private Vector3 MasuPosition;
 	private Vector3 Move;
 	public static bool CheckMove;
+	public int CreateStopper;
 
 
 	static string PieceName;
@@ -33,23 +34,37 @@ public class MoveKoma : MonoBehaviour {
 	bool CreateMasu(){
 		int posx = ban.LocalX ((int)MasuPosition.x);
 		int posy = ban.LocalY ((int)MasuPosition.y);
+		if(CreateStopper == 0){
+			return false;
+		}
 		if (CheckPosition (posx, posy) == true) {
-			if(ban.GetKomaIdArray(posx, posy) == -1){ 
+			if (ban.GetKomaIdArray (posx, posy) == -1) { 
 				GameObject MasuClone = (GameObject)Instantiate (Masu, transform.localPosition, transform.rotation);
-				MasuClone.transform.SetParent (UnityEngine.Object.FindObjectOfType<Canvas> ().transform);
-				posx = ban.ServerX(posx);
-				posy = ban.ServerY(posy);
-				MasuClone.transform.localPosition = new Vector3(posx,posy,0);
-				Debug.Log("create masu");
+				MasuClone.transform.SetParent (UnityEngine.GameObject.Find ("ban_main").transform);
+				posx = ban.ServerX (posx);
+				posy = ban.ServerY (posy);
+				MasuClone.transform.localPosition = new Vector3 (posx, posy, 0);
+				Debug.Log ("create masu");
 				return true;
-			}else {
+			}
+			if (KomaInfo.KomaArray[ban.GetKomaIdArray(posx,posy)-1].GetComponent<KomaInfo>().OwnerId != (int)Login.GetSavedUser ()) {
+				GameObject MasuClone = (GameObject)Instantiate (Masu, transform.localPosition, transform.rotation);
+				MasuClone.transform.SetParent (UnityEngine.GameObject.Find ("ban_main").transform);
+				posx = ban.ServerX (posx);
+				posy = ban.ServerY (posy);
+				MasuClone.transform.localPosition = new Vector3 (posx, posy, 0);
+				Debug.Log ("create masu");
+				CreateStopper = 0;
+				return true;
+			} else {
 				return false;
 			}
-		} else {
+		}else {
 			Debug.Log("create fail");
 			return false;
 		}
 	}
+
 	//--------------------------------------------マスを生成します------------------------------------------------
 	//--------------------------------------------生成されたマスを消去します----------------------------------------
 	void DestroyMasu(){
@@ -191,8 +206,13 @@ public class MoveKoma : MonoBehaviour {
 	//-------------------------------------------------------敵-------------------------------------------------------
 	//-------------------------------------------------------マスの生成場所制御----------------------------------------------
 	public void MasuPositionControl(int x,int y, int c){//x, y に0 , 1 , -1　を入れることによって,マスの生成位置を制御できる ,i は繰り返す回数
+		CreateStopper = 1;
 		for (int i=1; i<=c; i++) {
-			MasuPosition = transform.localPosition + new Vector3 (43*x, 43*y, 0) * i;
+			if((int)Login.GetSavedUser() == Convert.ToInt32(StateSetting.SavedPlayer)){
+				MasuPosition = transform.localPosition + new Vector3 (43*x, -43*y, 0) * i;
+			} else{
+				MasuPosition = transform.localPosition + new Vector3 (43*x, 43*y, 0) * i;
+			}
 			if (CreateMasu() == false) {
 				break;
 			}

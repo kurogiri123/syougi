@@ -23,6 +23,7 @@ public class KomaInfo : MonoBehaviour {
 	public string Promote;
 	//static int GetId;
 	static string StateUpdate;
+	public int OwnerId;
 
 	public void UpdatePiece(){
 		string url = Post.ipaddr + Post.Port + "/plays/update";
@@ -43,6 +44,7 @@ public class KomaInfo : MonoBehaviour {
 		MoveId = Id;
 		Posx = Convert.ToInt32(ReceivedUpdate["posx"].ToString());
 		Posy = Convert.ToInt32(ReceivedUpdate["posy"].ToString());
+		OwnerId=Convert.ToInt32(ReceivedUpdate["owner"].ToString());
 		Promote = ReceivedUpdate["promote"].ToString();
 		//GetId = Convert.ToInt32(ReceivedUpdate["get_id"].ToString());
 	}

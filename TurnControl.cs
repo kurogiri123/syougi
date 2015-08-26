@@ -25,6 +25,7 @@ public class TurnControl : MonoBehaviour {
 	public static int TurnPlayer;
 	//static string State;
 	public Text TurnText;
+	public static int BanState = 0;
 
 	
 
@@ -50,7 +51,16 @@ public class TurnControl : MonoBehaviour {
 	public static int TurnCountText(){
 		return TurnCount;
 	}
-
+	public static void RotateBan(){
+		//UnityEngine.Events.UnityAction<string> Request = Save;
+		if ((int)Login.GetSavedUser () == Convert.ToInt32 (StateSetting.SavedPlayer)) {
+			if(BanState ==0){
+				GameObject.Find ("ban_main").transform.Rotate (new Vector3 (0, 0, 180), Space.Self);
+				Debug.Log ("rotate ban");
+				BanState =1;
+			}
+		}
+	}
 
 
 
