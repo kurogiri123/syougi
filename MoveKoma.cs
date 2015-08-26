@@ -11,13 +11,14 @@ using System;
 public class MoveKoma : MonoBehaviour {
 
 
-	private static GameObject target;
+	public static GameObject target;
 	public GameObject Masu;
 	private MoveKoma Control;
 	private Vector3 MasuPosition;
 	private Vector3 Move;
 	public static bool CheckMove;
 	public int CreateStopper;
+	public static int RotateStopper = 0;
 
 
 	static string PieceName;
@@ -151,6 +152,7 @@ public class MoveKoma : MonoBehaviour {
 			KomaInfoComponent.Posx = ban.LocalX((int)Move.x);
 			KomaInfoComponent.Posy = ban.LocalY((int)Move.y);
 			KomaInfoComponent.UpdatePiece();
+			RotateStopper = 0;
 			//KomaInfoComponent.ReceivedUpdatePiece(piece,(int)target.MoveId);
 		}
 	}
@@ -231,18 +233,36 @@ public class MoveKoma : MonoBehaviour {
 		var json = MiniJSON.Json.Deserialize (ReceivedPieceName) as Dictionary<string, object>;
 		ban.InitKomaIdArray ();
 		for (int i =1; i<=40; i++) {
-			PieceName = json [i.ToString()].ToString();
-			var piece = (Dictionary<string,object>)json [i.ToString()];
+			PieceName = json [i.ToString ()].ToString ();
+			var piece = (Dictionary<string,object>)json [i.ToString ()];
 			bool CheckOwner = Convert.ToInt32 (piece ["owner"]) == Login.GetSavedUser ();
-			int posx = Convert.ToInt32(piece["posx"]);
-			int posy = Convert.ToInt32(piece["posy"]);
-			ban.SetKomaIdArray(posx,posy,i);
-			posx = ban.ServerX(posx);
-			posy = ban.ServerY(posy);
-			KomaInfo.KomaArray[i-1].transform.localPosition = new Vector3(posx,posy,0);
+			int posx = Convert.ToInt32 (piece ["posx"]);
+			int posy = Convert.ToInt32 (piece ["posy"]);
+			if (posx == 0) {
+				if (posy == 0) {
+					if (i >= 1 && i <= 9) {
+						KomaInfo.KomaArray [i - 1].transform.position = new Vector3 (477, 332, 0);
+						if(RotateStopper == 0){
+							KomaInfo.KomaArray [i - 1].transform.Rotate (new Vector3 (0, 0, 180), Space.Self);
+							RotateStopper = 1;
+						}
+					}
+					if(i >=10 && i <= 18){
+						KomaInfo.KomaArray [i - 1].transform.position = new Vector3 (477, 332, 0);
+						if(RotateStopper == 0){
+							KomaInfo.KomaArray [i - 1].transform.Rotate (new Vector3 (0, 0, 180), Space.Self);
+							RotateStopper = 1;
+						}
+					}
+				}
+			} else {
+				ban.SetKomaIdArray (posx, posy, i);
+				posx = ban.ServerX (posx);
+				posy = ban.ServerY (posy);
+				KomaInfo.KomaArray [i - 1].transform.localPosition = new Vector3 (posx, posy, 0);
+			}
 		}
 	}
-	
 	//---------------------------------------------------駒の動いた情報を送る----------------------------------------------
 	/*public void UpdatePiece(){
 		string url = Post.ipaddr + Post.Port + "/plays/update";

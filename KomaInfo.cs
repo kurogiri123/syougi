@@ -21,7 +21,7 @@ public class KomaInfo : MonoBehaviour {
 	public int Posx;
 	public int Posy;
 	public string Promote;
-	//static int GetId;
+	public int GetId;
 	static string StateUpdate;
 	public int OwnerId;
 
@@ -34,7 +34,8 @@ public class KomaInfo : MonoBehaviour {
 		dic ["posx"] = Posx.ToString();
 		dic ["posy"] = Posy.ToString();
 		dic ["promote"] = Promote;
-		//dic ["get_id"] = GetId.ToString();
+		GetId = ban.GetKomaIdArray (Posx, Posy);
+		dic ["get_id"] = GetId.ToString();
 		UnityEngine.Events.UnityAction<string> Request = SaveUpdatePiece;
 		Post.GetPost().POST (url, dic, Request);
 		MoveKoma.PiecesInformation ();
