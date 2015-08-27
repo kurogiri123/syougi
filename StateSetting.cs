@@ -33,6 +33,7 @@ public class StateSetting : MonoBehaviour {
 
 	void Start(){
 		StateInformation ();
+		TakeKoma.InitTakedArray ();
 	}
 	float time = 1.0f;
 	float StartTextTimer = 120f;

@@ -30,6 +30,7 @@ public class MoveKoma : MonoBehaviour {
 	void Start () {
 		ban.InitKomaIdArray ();
 		PiecesInformation ();
+
 	}
 	//-----------------------------------------------マスを生成します-----------------------------------------------
 	bool CreateMasu(){
@@ -232,6 +233,8 @@ public class MoveKoma : MonoBehaviour {
 	public static void CheckIdInfo(string ReceivedPieceName){
 		var json = MiniJSON.Json.Deserialize (ReceivedPieceName) as Dictionary<string, object>;
 		ban.InitKomaIdArray ();
+		TakeKoma InitComponent = GameObject.Find ("ban_main").GetComponent<TakeKoma> ();
+		InitComponent.InitCount ();
 		for (int i =1; i<=40; i++) {
 			PieceName = json [i.ToString ()].ToString ();
 			var piece = (Dictionary<string,object>)json [i.ToString ()];
@@ -240,19 +243,14 @@ public class MoveKoma : MonoBehaviour {
 			int posy = Convert.ToInt32 (piece ["posy"]);
 			if (posx == 0) {
 				if (posy == 0) {
-					if (i >= 1 && i <= 9) {
-						KomaInfo.KomaArray [i - 1].transform.position = new Vector3 (477, 332, 0);
-						if(RotateStopper == 0){
-							KomaInfo.KomaArray [i - 1].transform.Rotate (new Vector3 (0, 0, 180), Space.Self);
-							RotateStopper = 1;
-						}
-					}
-					if(i >=10 && i <= 18){
-						KomaInfo.KomaArray [i - 1].transform.position = new Vector3 (477, 332, 0);
-						if(RotateStopper == 0){
-							KomaInfo.KomaArray [i - 1].transform.Rotate (new Vector3 (0, 0, 180), Space.Self);
-							RotateStopper = 1;
-						}
+						TakeKoma TakeKomaComponent = GameObject.Find ("ban_main").GetComponent<TakeKoma>();
+						TakeKomaComponent.TakeTextCounter(KomaInfo.KomaArray[i-1]);
+						if(CheckOwner == false){
+						TakeKoma.TakedMyKomaArray[i-1] = i;
+						KomaInfo.KomaArray[i-1].transform.position= new Vector3(9999,9999,-88);
+					}else{
+						TakeKoma.TakedEnemyKomaArray[i-1] = i;
+						KomaInfo.KomaArray[i-1].transform.position= new Vector3(9999,9999,-88);
 					}
 				}
 			} else {
