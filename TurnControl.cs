@@ -26,7 +26,7 @@ public class TurnControl : MonoBehaviour {
 	//static string State;
 	public Text TurnText;
 	public static int BanState = 0;
-
+	public Text WhosTurn;
 	
 
 
@@ -35,6 +35,10 @@ public class TurnControl : MonoBehaviour {
 		UnityEngine.Events.UnityAction<string> Request = SaveTurn;
 		Post.GetPost().GET(url,Request);
 		MoveKoma.PiecesInformation ();
+		TurnControl TurncontrolComponent = GameObject.Find ("TurnText").GetComponent<TurnControl> ();
+		TurncontrolComponent.ChangeWhosTurn ();
+		//MoveKoma MoveKomaComponent = GameObject.Find ("state").GetComponent<MoveKoma> ();
+	//	MoveKomaComponent.DestroyMasu ();
 	}
 
 	public static void SaveTurn(string ReceivedTurn){
@@ -59,6 +63,16 @@ public class TurnControl : MonoBehaviour {
 				Debug.Log ("rotate ban");
 				BanState =1;
 			}
+		}
+	}
+	public void ChangeWhosTurn(){
+		if (TurnPlayer == Login.GetSavedUser ()) {
+			WhosTurn.text = "あなたのターンです";
+		}
+		else if(TurnPlayer != Login.GetSavedUser ()) {
+			WhosTurn.text = "相手のターンです";
+		} else {
+			WhosTurn.text = "";
 		}
 	}
 

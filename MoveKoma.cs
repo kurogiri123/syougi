@@ -69,7 +69,7 @@ public class MoveKoma : MonoBehaviour {
 
 	//--------------------------------------------マスを生成します------------------------------------------------
 	//--------------------------------------------生成されたマスを消去します----------------------------------------
-	void DestroyMasu(){
+	public void DestroyMasu(){
 		GameObject[] ObjectMasu = GameObject.FindGameObjectsWithTag ("masu");
 		foreach (GameObject masu in ObjectMasu) {
 			Destroy (masu);

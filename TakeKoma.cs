@@ -62,7 +62,6 @@ public class TakeKoma : MonoBehaviour {
 
 
 
-
 	public void TakeTextCounter(GameObject target){
 		ChangeTextCount (target,1, 18, EnemyFuCount, EnemyFuText, FuCount, FuText);
 		ChangeTextCount (target,19, 22, EnemyKyoCount, EnemyKyoText, KyoCount, KyoText);
@@ -90,6 +89,11 @@ public class TakeKoma : MonoBehaviour {
 			}
 		}
 	}
+
+
+
+
+
 
 	public void InitCount(){
 		EnemyFuCount = 0;
