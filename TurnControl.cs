@@ -10,19 +10,13 @@ using System;
 
 public class TurnControl : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		//TurnText = this.gameObject.GetComponent<Text> ();
-	}
-	
-	// Update is called once per frame
 	void Update () {
 		TurnText.text = "ターン：" + TurnCountText();
 	}
 
 	static int TurnCount=0;
 	static int WatcherCount;
-	public static int TurnPlayer;
+	public static int TurnPlayer = 0;
 	//static string State;
 	public Text TurnText;
 	public static int BanState = 0;
@@ -38,7 +32,7 @@ public class TurnControl : MonoBehaviour {
 		TurnControl TurncontrolComponent = GameObject.Find ("TurnText").GetComponent<TurnControl> ();
 		TurncontrolComponent.ChangeWhosTurn ();
 		//MoveKoma MoveKomaComponent = GameObject.Find ("state").GetComponent<MoveKoma> ();
-	//	MoveKomaComponent.DestroyMasu ();
+		//MoveKomaComponent.DestroyMasu ();
 	}
 
 	public static void SaveTurn(string ReceivedTurn){
@@ -66,12 +60,13 @@ public class TurnControl : MonoBehaviour {
 		}
 	}
 	public void ChangeWhosTurn(){
-		if (TurnPlayer == Login.GetSavedUser ()) {
-			WhosTurn.text = "あなたのターンです";
-		}
-		else if(TurnPlayer != Login.GetSavedUser ()) {
-			WhosTurn.text = "相手のターンです";
-		} else {
+		if (TurnPlayer != 0) {
+			if (TurnPlayer == Login.GetSavedUser ()) {
+				WhosTurn.text = "あなたのターンです";
+			} else if (TurnPlayer != Login.GetSavedUser ()) {
+				WhosTurn.text = "相手のターンです";
+			}
+		}else {
 			WhosTurn.text = "";
 		}
 	}

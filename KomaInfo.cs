@@ -55,5 +55,5 @@ public class KomaInfo : MonoBehaviour {
 		StateUpdate = json ["update"].ToString ();
 	}
 
-	public static GameObject[] KomaArray = new GameObject[40];
+	public static GameObject[] KomaArray = new GameObject[40];//駒のidをsaveする
 }

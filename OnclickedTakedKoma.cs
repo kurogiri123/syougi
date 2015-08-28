@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class OnclickedTakedKoma : MonoBehaviour {
+	//持ち駒の処理(実装されてない)
+
 
 	// Use this for initialization
 	void Start () {

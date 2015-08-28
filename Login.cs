@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using System.Text; 
 using System.IO; 
 using System.Net;
@@ -15,6 +16,35 @@ public class Login : MonoBehaviour {
 	public InputField ID;
 	public InputField ROOM;
 
+	EventSystem system;
+
+	void Start(){
+		system = EventSystem.current;
+	}
+
+	void Update(){
+		//キーボード操作対応
+		if (Input.GetKeyDown (KeyCode.Tab)) {
+			Selectable next = system.currentSelectedGameObject.GetComponent<Selectable> ().FindSelectableOnDown ();
+			if (next != null) {
+				InputField inputfield = next.GetComponent<InputField> ();
+				if (inputfield != null)
+					inputfield.OnPointerClick (new PointerEventData (system));
+				
+				system.SetSelectedGameObject (next.gameObject, new BaseEventData (system));
+			}
+			
+			//Here is the navigating back part:
+			else {
+				next = Selectable.allSelectables [0];
+				system.SetSelectedGameObject (next.gameObject, new BaseEventData (system));
+			}
+			
+		}
+		if (Input.GetKeyUp (KeyCode.KeypadEnter)) {
+			LOGIN ();
+		}
+	}
 	// Use this for initialization
 	public void LOGIN()
 	{
